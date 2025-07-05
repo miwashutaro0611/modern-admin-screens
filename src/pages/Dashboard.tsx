@@ -4,6 +4,7 @@ import CMSLayout from '../components/CMSLayout';
 import StatsCard from '../components/StatsCard';
 import DataTable from '../components/DataTable';
 import { FileText, Users, Eye, MessageSquare, TrendingUp } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const Dashboard = () => {
   const [recentArticles] = useState([
@@ -11,6 +12,17 @@ const Dashboard = () => {
     { id: 2, title: 'TypeScriptベストプラクティス', author: '佐藤花子', status: '下書き', views: 0, date: '2024-01-14' },
     { id: 3, title: 'レスポンシブデザインのコツ', author: '山田次郎', status: '公開', views: 890, date: '2024-01-13' },
     { id: 4, title: 'パフォーマンス最適化手法', author: '鈴木一郎', status: 'レビュー中', views: 0, date: '2024-01-12' },
+  ]);
+
+  const [accessData] = useState([
+    { date: '1/8', pv: 2400, uv: 1400 },
+    { date: '1/9', pv: 1398, uv: 2210 },
+    { date: '1/10', pv: 9800, uv: 2290 },
+    { date: '1/11', pv: 3908, uv: 2000 },
+    { date: '1/12', pv: 4800, uv: 2181 },
+    { date: '1/13', pv: 3800, uv: 2500 },
+    { date: '1/14', pv: 4300, uv: 2100 },
+    { date: '1/15', pv: 5200, uv: 2800 },
   ]);
 
   const articleColumns = [
@@ -76,10 +88,49 @@ const Dashboard = () => {
               <TrendingUp size={20} className="mr-2" />
               アクセス推移
             </h3>
-            <div className="h-48 bg-gray-50 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-              <p className="text-gray-500 dark:text-gray-400">
-                チャートエリア（実装時にはグラフライブラリを使用）
-              </p>
+            <div className="h-48">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={accessData}>
+                  <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
+                  <XAxis 
+                    dataKey="date" 
+                    fontSize={12}
+                    axisLine={false}
+                    tickLine={false}
+                  />
+                  <YAxis 
+                    fontSize={12}
+                    axisLine={false}
+                    tickLine={false}
+                  />
+                  <Tooltip 
+                    contentStyle={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                    }}
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="pv" 
+                    stroke="#3b82f6" 
+                    strokeWidth={2}
+                    dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
+                    activeDot={{ r: 6, stroke: '#3b82f6', strokeWidth: 2, fill: '#ffffff' }}
+                    name="ページビュー"
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="uv" 
+                    stroke="#10b981" 
+                    strokeWidth={2}
+                    dot={{ fill: '#10b981', strokeWidth: 2, r: 4 }}
+                    activeDot={{ r: 6, stroke: '#10b981', strokeWidth: 2, fill: '#ffffff' }}
+                    name="ユニークビジター"
+                  />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
           </div>
 
